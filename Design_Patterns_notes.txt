@@ -1,0 +1,644 @@
+
+>>>>
+Design principles
+Head First Design Patterns
+<<<<
+
+	A Pattern is a solution to a problem in a context
+
+	1. Identify the aspects of your application that vary and separate them from what stayes the same
+
+	2. Program to an interface not an implementation
+
+	3. Favor composition over inheritance
+
+	4. Strive for loosely coupled designs between objects that interact.
+	   Loosely coupled designs allow us to build flexible OO systems that can handle change becouse they minimize 
+	   tha interdependency between objects
+
+	5. Classes should be open for extension, but closed for modification
+
+	6. Depend upon abstractions. Do not depend upon concrete classes
+
+	7. Principle of Least Knowledge - talk only to your immediate friends.
+	                                - guides us to reduce the interaction between objects to just a few close "friends".
+	                                - prevents us from creating designs that have a large number of classes coupled together
+	                                  so that changes in one part of the system cascade to other parts.
+
+	8. The Hollywod Principle - Don't call us well call you.
+
+	9. Design Principle - A class should have only one reasson to change
+
+
+	Class Patterns describe how relationships between classes are defined via inheritance. Relationships in class patterns
+	are established at compile time.
+
+	Object patterns describe relationships between objects and are promarily defined by composition. Relationships in object patterns
+	are typically created at runtime and are more dynamic and flexible.
+
+>>>>
+Creational patterns
+<<<<
+
+Creational design patterns deal with object creation mechanisms, trying to create objects in a manner suitable to the situation.
+Creational patterns involve object instntiation and all provide a way to decouple a client from the objects it needs to instantiate.
+Creational design patterns are composed of two dominant ideas. One is encapsualting knowledge about wich concrete classes 
+the system uses. Another is hiding how instances of these concrete clases are created and combined.
+
+Object-creational patterns defer part of its object creatin to another object, while Class-creational patterns defer its object
+creation to subcaèsses
+
+>>>	Abstract Factory pattern - provides interface for creating related or dependent objecs without specifying the objects
+	                           concrete classes
+	                         - provide an interface for creating families of related or dependent objects  without specifying
+	                           their concrete classes.
+	                         - with the Abstract Factora pattern, an class delegates the responsibility of object instatiation to
+	                           another objects via composition, while the Factory Method patern uses inheritance and relies ton subclasses
+	                           to handle the desired object instantiation.
+	                         - Factory Method is used to create one product only but Abstract Factory is about creating families of
+	                           related or dependant products.
+	                         - Factory Method pattern hides the construction of a single object where as Abstract Factory hides the 
+	                           construction of a family of related objects
+
+
+
+	                          Clas A{
+	                            Public A(Factory factory){
+	                              this.factory = factory;
+                                    }
+	                          }
+
+                     --------------------
+                     |  <interface>     |                                ---------------
+                     | AbstractFacotry  |<-------------------------------| Client      |---------------+
+                     |------------------|                                |-------------|               |
+                     | CreateProductA() |                                |             |               |
+                     | CreateProductB() |                                ---------------               |
+                     --------------------                                                              |
+                       /\            /\                                                                |
+                        .             .                                      --------------------      |
+                        .             .                                      |  <interface>     |<-----+
+                        .             .                                      | AbstractProductA |      |
+        -----------------------  -----------------------                     |------------------|      |
+      |-| ConcreteFactory1    |  | ConcreteFactory2    |--+                  |                  |      |
+      | |---------------------|  |---------------------|  |                  --------------------      |
+      | | CreateProductA{...} |  | CreateProductA{...} |  |                    /\            /\        |
+      | | CreateProductB{...} |  | CreateProductB{...} |  |                    .              .        |
+      | -----------------------  -----------------------  |         -------------      -------------   |
+      |                                                   +-------->| ProductA2 |      | ProductA1 |<--|-+
+      |                                                   |         |-----------|      |-----------|   | |
+      |                                                   |         |           |      |           |   | |
+      |                                                   |         -------------      -------------   | |
+      |                                                   |                                            | |
+      |                                                   |                                            | |
+      |                                                   |                  --------------------      | |
+      |                                                   |                  |  <interface>     |<-----+ |
+      |                                                   |                  | AbstractFactoryB |        |
+      |                                                   |                  |------------------|        |
+      |                                                   |                  |                  |        |
+      |                                                   |                  |------------------|        |
+      |                                                   |                    /\            /\          |
+      |                                                   |                    .              .          |
+      |                                                   |         -------------       -------------    |
+      |                                                   +-------->| ProductB2 |       | ProductB1 |<---+
+      |                                                             |-----------|       |-----------|    |
+      |                                                             |           |       |           |    |
+      |                                                             -------------       -------------    |
+      |                                                                                                  |
+      +--------------------------------------------------------------------------------------------------+
+
+
+
+>>>	Builder pattern - separates the construction of a complex object from its representation so that the same construction
+	                  process can create different representation
+
+>>>	Factory method pattern - defines an interface for creating an object, but lets subclasses decide which class to instantiate.
+	                         Have superclass with abstract factory method that allowes subclasses to implement their own factory
+                                 method with their own result class.
+	                         is useful if you've only got one concrete creator because you are decoupling the implementation of the product
+	                         from its use.
+	                       - factory methods also have the advantage of being able to return an object of an subtype of their return type.
+	                       - with the Abstract Factora pattern, an class delegates the responsibility of object instatiation to
+	                         another objects via composition, while the Faxtory Method patern uses inheritance and relies on subclasses
+	                         to handle the desired object instantiation.
+	                       - Factory Method is used to create ane product only but Abstract Factory is about creating families of
+	                         related or dependant products.
+	                       - Factory Method pattern hides the construction of a single object where as Abstract Factory hides the 
+	                         construction of a family of related objects
+
+                            ----------------------                 -------------------
+                            | AbstractCreator    |                 | AbstractProduct |
+                            |--------------------|                 |-----------------|
+                            | factoryMethod()    |                 | porductMetod()  |
+                            | anOperation(){...} |                 -------------------
+                            ----------------------                            /\
+                                      /\                                      .
+                                 (IS-A).                                      .(IS-A)
+                                       .                              --------.----------------
+                            ------------------------    (HAS-A)      ------------------------ |
+                            | ConcreteCreator      |---------------->| ConcreteProduct      |(one or more different)
+                            |----------------------|                 |----------------------| |
+                            | factoryMethod(){...} |                 | productMethod(){...} |--
+                            ------------------------                 ------------------------
+
+>>>	Prototype pattern - specifies the kind of object to create using prototypical instance, and creates new objects by clonning
+	                    this prototype
+
+>>>	Singleton pattern -  ensures that class only has one instance, and provides a global point of access to it
+	                     Singeltone object consists of:
+	                     - private,static internal object reference
+	                     - public, static factory method that returns this property
+	                     - some form of lazy initialization of the internal instance
+	                     - only a private constructor
+	                     Clients access any instance of a singeltononly through the static factory method
+
+                                     -------------------------
+                                     |     Singleton         |
+                                     |-----------------------|
+                                     | static uniqueInstance |
+                                     |                       |
+                                     | //other data          |
+                                     |-----------------------|
+                                     | static getInstance()  |
+                                     |                       |
+                                     | //other methods       |
+                                     -------------------------
+	                    When to use Static class in place of Singleton
+	                    1) If Singleton is not maintaing any state, and just providing global access to methods, than consider using 
+	                       static class (java.lang Math java.lang.String), as static methods are much faster than Singleton, because 
+	                       of static binding during compile time. Is not advised to maintain state inside static class, especially in 
+	                       concurent environment, where it could lead subtile tace conditions when midiffied parellel by multiple threads
+	                       without adequate synchronization
+	                    Static class ws Singleton
+	                    1)Static class provides better performancet than Singleton, static methods are bonded on compile time
+	                    2)ability to override.Since static methods in Java cannot be overridden they lead to inflexibility. You can easily 
+	                      override methods defined in Singleton class by extending it.
+	                    3)Static classes are hard to mock and harder to test than Singletons.it's easier to write JUnit test for Singleton than 
+	                      static classes, you can pass mock object whenever Singleton is expected, e.g. into constuctor or as method arguments
+	                    4)If you requirements needs to maintain state than Singleton is better chice than static class, because manitaining state
+	                      in later case is nightmare and leads to subtile bugs.
+	                    5)Singleton can be lazy loaded if it is an heavy object.
+	                    6)Many Dependency Injection framework manages Singleton quite well (Spring)
+	                    7)Singleton can easily be serialized, which may be necessary if you need to save its state to disc, or send it
+	                    8)Singleton can implement an interface.
+
+
+>>>>
+Structural Patterns
+<<<<
+
+Structural patterns let you compose classes or objects into larger structures
+
+>>>	Adapter - allows classes with incopatible interfaces to work together by wrapping its own interface around that of an already
+	          existing class.
+	        - converts the interface of a class into another interface the clients expect. Adapter lets classes work together that
+	          couldnt otherwise because of incompatible interfaces.
+	        - The intent of the Adapter pattern is to alter an interface so that it matches one a client is expecting. The intent of
+	          the Facade Pattern is to provide a simplified interface to a subsystem. 
+	        - Proxy and Adapter sit in front of other objects and forward requests to them. Adapter changes the interface of the
+	          object it adapts, while Proxy implements the same interface.
+
+
+                  
+                  Object Adapter
+                        --------------   (HAS-A)      ---------------------
+                        |   Client   |--------------->|    <interface>    |
+                        |------------|                |     Target        |
+                        |            |                |-------------------|
+                        --------------                | request()         |
+                                                      ---------------------
+                                                          /\
+                                                           .(IS-A)
+                                                           .
+                                                      --------------------- (HAS-A)  --------------------------
+                                                      |    Adapter        |--------->| Adaptee                |
+                                                      |-------------------|          |------------------------|
+                                                      | request(){...}    |          | specificRequest(){...} |
+                                                      ---------------------          --------------------------
+
+                 Class Adapter (zbog multiple inheritance nije nmoguce u JAVA-i)
+
+                       -------------    (HAS-A)         -------------                   ---------------------
+                       |   Client  |------------------->|  Target   |                   |    Adaptee        |
+                       |-----------|                    |-----------|                   |-------------------|
+                       |           |                    | request() |                   | specificRequest() |
+                       -------------                    -------------                   ---------------------
+                                                             /\                                 /\
+                                                              .       -------------------        .
+                                                              ........| Adapter         |.........
+                                                               (IS-A) |-----------------| (IS-A)
+                                                                      | request()       |
+                                                                      -------------------
+
+>>>	Bridge - decouples an abstraction from its implementation so that the two can vary independently
+
+>>>	Composite - allows you to compose objects into tree structures to represent part-whole hierarchies. Composite lets clients treat 
+	            individual objects and compositions of objects uniformly.
+	          - allows us to build structures of objects on the form of trees that contain both compositions of objects and individual
+	            objects as nodes
+	          - using a composite structure we can apply the same operations over both composites and individual objects. In other words
+	            in most cases we can ignore the differences between compositions of objects and individual objects.
+
+                           ------------------                           ------------------------
+                           |   Client       |-------------------------->|   <<interface>>      |
+                           |----------------|                           |     Component        |<-------------------+
+                           |                |                           |----------------------|                    |
+                           ------------------                           | operation()          |                    |
+                                                                        | add(Component)       |                    |
+                                                                        | remove(Component)    |                    |
+                                                                        | getChild(int)        |                    |
+                                                                        ------------------------                    |
+                                                                          /\                /\                      |
+                                                                          .                  .                      |
+                                                                          .                  .                      |
+                                                            -------------------         --------------------------  |
+                                                            |    Leaf         |         |    Composite           |--+
+                                                            |-----------------|         |------------------------|
+                                                            | operation(){...}|         | operation(){...}       |
+                                                            -------------------         | add(Component){...}    |
+                                                                                        | remove(Component){...} |
+                                                                                        | getChild(int){...}     |
+                                                                                        --------------------------
+
+	           Client uses the Component interface to manipulate the objects in the compositon 
+	           Component defines interface for all objects in the composition both the composite node the leaf nodes. Component may
+                   implement a default behaviour for add() remove() getChild() and it operations.
+      
+
+
+>>>	Decorator - attaches additional responsibilites to an object dynamically.Decorators provide flexible alternative to subclassing for
+	            extending functionality.
+	          - Decorator implement the same interface as a component. At the same time decorator has an instance variable that holds 
+	            a referense to a component it wraps.
+	          - sometimes Proxy and Decorator look very similar but therir purposes are different: a decorator adds behviour to 
+	            a class, while a proxy controls access to it.
+
+
+                             -----------------------
+                             | AbstractComponenet  |<-------------------+
+                             |---------------------|                    |
+                             | methodA()           |                    |
+                             | methodB()           |                    |
+                             | //other methods     |                    |component
+                             -----------------------                    |(HAS-A)
+                              /\                 /\                     |
+                               .                  .                     |
+                        (IS-A) .                  .(IS-A)               |
+                               .                  .                     |
+              ---------------------             ---------------------   |
+              | ConcreteComponent |             | AbstractDecorator |---+
+              |-------------------|             |-------------------|
+              | methodA(){...}    |             | methodA()         |
+              | methodB(){...}    |             | methodB()         |
+              | //other methods   |             | //other methods   |
+              ---------------------             --------------------- 
+	                                         /\             /\
+                                                 .               .
+                                           (IS-A).               .(IS-A)
+                                                 .               .
+                                 ----------------------    ----------------------
+                                 | ConcreteDecoratorA |    | ConcreteDecoratorB |
+                                 |--------------------|    |--------------------|
+                                 | Component wrapdObj |    | Component WrapdObj |
+                                 |--------------------|    | Object newState    |
+                                 | methodA(){...}     |    |--------------------|
+                                 | methodB(){...}     |    | methodA(){...}     |
+                                 | newMetod(){...}    |    | methodB(){...}     |
+                                 | //other methods    |    | //other methods    |
+                                 ----------------------    ----------------------
+
+>>>	Facade - provides a unified interface to a set of interfaces in a subsystem. Facade defines a higher-level interface that makes the 
+	         subsystem easier to use.
+	         A facade not only simplifies an interface, it decouples a client from a subsystem of components.
+	         The intent of the Adapter pattern is to alter an interface so that it matches one a client is expecting. The intent of
+	         the Facade Pattern is to provide a simplified interface to a subsystem. 
+
+                      -------------                        ---------------   
+                      |   Client  |----------------------->|    Facade   |
+                      |-----------|                        |-------------|
+                      |           |                        |             |
+                      -------------                        ---------------
+                                                             /    |    \
+                                                            /     |     \
+                                                 ----------/------|------\----------------------
+                                                 |      ----    ----     ---- subsystem clases |
+                                                 |      |  |    |  |     |  |                  |
+                                                 |      ----    ----     ----                  |
+                                                 -----------------------------------------------
+
+>>>	Flyweight
+
+>>>	Proxy   - provides a surrogate or placeholder or representative for another object to control access to it
+	        - remote proxy controls access to a remote object
+	        - virtual proxy controls access to a resource that is expensive to create
+	        - protection proxy controls access to a resource based in access rights
+	        - sometimes Proxy and Decorator look very similar but therir purposes are different: a decorator adds behviour to 
+	          a class, while a proxy controls access to it.
+	        - Proxy and Adapter sit in front of other objects and forward requests to them. Adapter changes the interface of the
+	          object it adapts, while Proxy implements the same interface.
+
+
+                                       -------------------
+                                       |  <<interface>>  |
+                                       |  Subject        |
+                                       |-----------------|
+                                       | request()       |
+                                       ------------------- 
+                                        /\              /\
+                                        .                .
+                                        .                . 
+                                        .                .
+                        ------------------             ------------------
+                        | RealSubject    |<------------|  Proxy         |
+                        |----------------|             |----------------|
+                        | request()      |             | request()      |
+                        ------------------             ------------------
+
+	    Both the Proxy and the RealSubjct implement the Subject interface. This allows any cliente to treat the proxy
+            just like the RealSubject.
+            The Proxy keeps a reference to the Subject, so it can forward requests to the Subject when necessary.
+            The Proxy often instatiates or handles the creation of the RealSubject.
+            The Real Subject is usually the object that does most of the real work; the Proxy controls access to it.
+
+	    Common technique to make clients use the Proxy rather than the RealSubject is to prvide a factory that instantiates
+	    and returnes the subject.Because this happens in a factory method we can then wrap the subject with a proxy before
+	    returning it.
+
+
+>>>>
+Behavioral patterns
+<<<<
+
+Behavioral pattern is concerned with how classes and objects interact and distribute responsibility.
+
+>>>	Chain of responsibility
+
+>>>	Command - encapsulates a request as an object, thereby letting you parameterize other objects with different requests, queue
+	          or log requests, and support undoable operations.
+
+                       --------------          ---------------------           ----------------------
+                       |   Client   |          |    Invoker        | (HAS-A)   |     <interface>    |
+                       |            |          |                   |---------->|      Command       |
+                       |------------|          |-------------------|           |--------------------|
+                       |            |          | setCommand(){...} |           | execute()          |
+                       --------------          ---------------------           | undo()             |
+                         |       |                                             ----------------------
+                         |       |                                                       /\
+                         |       |                                                       .
+                         |       |                                                       .(IS-A)
+                         |       |                                                       .
+                         |       |  (HAS-A)     -------------------   (HAS-A)  ------------------------
+                         |       +------------->|    Receiver     |<-----------| ConcreteCommand      |
+                         |                      |-----------------|            |----------------------|
+                         |                      | action(){...}   |            | execute(){...}       |
+                         |      (HAS-A)         -------------------            | undo(){...}          |
+                         +---------------------------------------------------->|                      |
+                                                                               ------------------------
+
+                      Client is responsible for creating ConcreteCommand and setting its Receiver
+                      Invoker holds a command and at some point asks the command to carry out a request by calling its execute() method
+                      ConcreteCommand defines binding between an action anda Receiver
+
+>>>	Interpreter
+
+>>>	Iterator - provides a way to access the elements of an aggregate object sequentially wihout exposing its underlying
+	           representation
+	         - it places the task of traversal on the iterator object, not on the aggregate, which simplifies the aggregate interface
+	           and implementation, and pleces the responsibility where it should be.
+
+                     --------------------                  -----------------                --------------------
+                     | <<interface>>    |<-----------------|    Client     |--------------->|  <<intefrace>>   |
+                     |   Aggregate      |                  |---------------|                |    Iterator      |
+                     |------------------|                  |               |                |------------------|
+                     | createIterator() |                  -----------------                | hasNext()        | 
+                     --------------------                                                   | next()           |
+                           /\                                                               | remove()         |
+                            .                                                               --------------------
+                            .                                                                       /\
+                            .                                                                       .
+                            .                                                                       .
+                     -------------------------                                              --------------------
+                     | ConcreteAggregator    |--------------------------------------------->| ConcreteIterator |
+                     |-----------------------|                                              |------------------|
+                     | createIterator(){...} |                                              | hasNext(){...}   |
+                     -------------------------                                              | next(){...}      |
+                                                                                            | remove(){...}    |
+                                                                                            --------------------
+                     
+
+>>>	Mediatior
+
+>>>	Memento
+
+>>>	Observer - Defines a one-to-many dependency between objects so that when one object changes state all of its dependents are
+                   notified and updated automatically
+
+             ---------------------                        ----------------
+             |    <interface>    |        observers       |  <interface> |
+             |     Subject       |----------------------->|   Observer   |
+             |-------------------|       (HAS-A)          |--------------|
+             | registerObserver()|                        | Update()     |
+             | removeObserver()  |                        |              |
+             | notifyObservers() |                        |              |
+             ---------------------                        ----------------
+                      /\                                         /\
+                       .(IS-A)                                    .(IS-A)
+                       .                                          .
+             ---------------------------      subject         --------------------
+             | ConcreteSubject         |<---------------------| ConcreteObserver |
+             |-------------------------|      (HAS-A)         |------------------|
+             | registerObserver(){...} |                      | update(){...}    |
+             | removeObserver(){...}   |                      |                  |
+             | notifyObservers(){...}  |                      | //other Observer |
+             |                         |                      | methods          |
+             | !setChanged() {...} JAVA|                      --------------------
+             | //other Subject         |
+             | methods                 |
+             ---------------------------
+
+
+>>>	State Pattern - allows an object to alter its behavior when its internal state changes.
+	              - the context gets its behavior by delegating to the current state object it is composed with.
+	              - think of it as an alternative to putting lots of conditionals in your context; by encapsulationg the behavior
+	                within state objects, you can simply change the state object in context to change its behavior.
+	              - state transitions can be controlled by the State classes or by the Context classes.
+	              - as a general guidline, when the state transitions are fixed they are appropriate for putting in the Context,
+                        however, when translations are more dynamic, they are typically pleced in the state classes themselves.
+	              - State classes may be shared among Context instances.
+
+              ---------------------                           -----------------
+              |  Context          |-------------------------->| <<interface>> |
+              |-------------------|                           |     State     |
+              | request(){        |                           |---------------|
+              |   state.handle()} |                           | handle()      |
+              ---------------------                           -----------------
+                                                               /\           /\
+                                                               .             .
+                                                               .             .
+                                                               .             .
+                                                ------------------         ------------------
+                                                | ConcreteStateA |         | ConcreteStateB |
+                                                |----------------|         |----------------|
+                                                | handle(){...}  |         | handle(){...}  |
+                                                ------------------         ------------------
+
+               Context can have a number of internal states. Whenever the request() is made on the Context it is delegated to the state to handle.
+               State interface defines a common interface for all concrete states; the states all implement the same interface, so they are
+               interchangeable.
+               Each ConcreteState provides its own implementation for a request. In this way, when the Context changes state,
+               its behavior will change as well. 
+
+        
+>>>	Strategy Pattern - defines a family of algorithms, encapsulates each one, and makes them interchangeable. Strategy lets the algorithm
+	                   vary independently from clinets that use it.
+	                 - Encapsulates interchangeable behaviors and use delegation to decide which behavior to use
+	                 - things that vary are separated from what stays the same
+	                 - more flexible than Tempalte Method Pattern because it uses object composition. Clients can change their algorithms at 
+	                   runtime simply by using a different strategy object.
+	                 - think of it as a flexible alternative to subclassing; if you use inheritance to define the behavior of a class,
+                           then you're stuck with that behavior even if you need to change it. With Strategy you can change the behavior by composing
+                           with a different objects.
+
+         
+        client                                                                    Encapsulated S Behaviour
+              -------------------------                                            ----------------------
+              | AbstractClass         |                                            |    <<interface>>   |
+              |-----------------------|                      (HAS-A)               |      SBehaviour    |
+              | SBehaviour sBehaviour-|------------------------------------------->|--------------------|   
+              | FBehaviour fBehaviour-|----------------------+                     | sMethod()          |
+              |-----------------------|                      |                     ----------------------
+              | method1()             |                      |                         /\            /\
+              | method2(){            |                      |                          .             .
+              |  sBehaviour.sMethod()}|                      |              -------------------      -------------------
+              | method3(){            |                      |              | Scalss1         |      | Scalss2         | - set of 
+              |  fBehaviour.fMethod()}|                      |              |-----------------|      |-----------------|   algorithms (behaviors)
+              -------------------------                      |              | sMethod() {...} |      | sMethod(){...}  |
+                /\                 /\                        |              -------------------      -------------------
+                .                   .                        |
+                .                   .                        |
+      ---------------------  -----------------------         |                     Encapsulated F Behaviour
+      | Concreteclass1    |  | ConcreteClass2      |         |                     ----------------------
+      |-------------------|  |---------------------|         +-------------------->|   <<interface>>    |
+      | method(){...}     |  | method(){...}       |                               |     FBehaviour     |
+      ---------------------  -----------------------                               |--------------------|
+                                                                                   | fMethod()          |
+                                                                                   ----------------------
+                                                                                     /\              /\
+                                                                                     .                .
+                                                                            ------------------      ------------------
+                                                                            | FClass1        |      | FCalss2        | - set of 
+                                                                            |----------------|      |----------------|   algorithms (behaviors)
+                                                                            | fMethod(){...} |      | fMethod(){...} |
+                                                                            ------------------      ------------------
+
+>>>	Template Method Pattern - defines the skeleton or steps of an algorithm in a method, deferring implementation of some or all  steps in an algorithm
+	                          to subclasses. Template method lets subclasses redefine certain steps of an algorithm without changing 
+	                          the algorithm's structure.
+	                          Template method can be declared as FINAL to prevent subclasses from reworking the sequence of steps in the algorithm.
+	                          
+	                          A hook is a method that is declared in the abstract class, but onyl given an empty or default implementation.
+	                          This gives subclasses the ability to hook into the algorithm at various points, if they wish;
+	                          a subclass is also free to ignore the hook.
+
+	                        - The tmeplate method's abstract class may define concrete methods, abstract methods and hooks
+	                        - the hollywood principle guides us to put decision-making in high-level modules that can decide how and when
+	                          to call low level modules
+                                - the startegy and template method patterns both encapsulate algorithms , one by inheritance and one by composition
+	                        - the factory method is a specialization of template method 
+
+                        -------------------------------
+                        |   AbstractClass             |
+                        |-----------------------------|                    --------------------------
+                        | final templateMethod(){...}.|....................| primitiveOperation1(); |
+                        | primitiveOperation1()       |                    | primitiveOpertaion2(); |
+                        | primitiveOpertaion2()       |                    --------------------------
+                        -------------------------------
+                                     /\
+                                     .
+                                     . (IS-A)
+                                     .
+                        ------------------------------
+                        |  ConcreteClass             |
+                        |----------------------------|
+                        | primitiveOperation1(){...} |
+                        | peimitiveOperation2(){...} |
+                        ------------------------------
+
+
+>>>	MVC 
+
+                              1) action            -------------------       2) change state
+                              +------------------->|   Controller    |------------------+
+                              |                    -------------------                  |
+                              |                           |                             |
+                              |                           |                             |
+                              |                           |                             |
+                              |                           |                             \/
+                     ---------------           3) change display                   --------------
+                     |   View      |<---------------------+                        |   Model    |
+                     | (Composite) |                                               | (Observer) |
+                     ---------------                                               --------------
+                            |    /\                                                   |   /\
+                            |     |                4) change notifcation              |   |
+                            |     +---------------------------------------------------+   |
+                            |                    5) get state information                 |
+                            +-------------------------------------------------------------+
+
+	        Controler is the strategy for the view. The view can use different implementations of the controler to get different behaviour.
+	        The view uses the composite Pattern to implement the user interface, which usually consists of nested components like panels frames
+	        and buttons.
+	        The model makes use of the Observer Patern so that it can keep observers updated jet stay decoupled from them.
+	        The Adapter Pattern can be used to adapt a new model to an existing view and controller.
+
+	        Model represetns your actual data, data are either in database or stored into computer memory
+	        View is part of software used to interact with the user and presents data model. Since same data model can be presented in differnt
+	        ways there could be many View's to interact wih the same data model
+	        Controller holds the business logic or application logic
+
+>>>	Visitor Patern
+
+		- a way of separating analgorithm from the object structure on which it operates. A practicle result of this operation is the ability
+		  add new operations to the existent object structure without modifying the structures.
+		- in essence, the visitor allows adding new virtual functions to a family of classes, without modifying the classes. Instead,
+		  a visitor class is created that implements all of the appropriate specialization of the virtual function. The visitor takes
+		  the reference as input and implements the goalthrough double dispatch.
+		- moving operations into visitor classes is beneficial when:
+			- many unrelated operations on an object sructure are required
+			- the clases that make up the object structure are known and not expected to change
+			- new operations aneed to be added frequently
+			- an algorithm involves several classes of the object structure, but it is desired to manage it in one single locatin
+			- an algotihm needs to work across several independent class hierarchies
+		- a drawback to this pattern is that it makes extensions to the class hierarchy more difficult, as new classes typically
+		  require a new "visit" method to be added to each visitor
+
+                                 
+                                                                    -------------------
+                     ------------        (HAS A)                    |  <interface>    |	
+                     |  Client  |---------------------------------->|   Visitor       |
+                     ------------                                   |-----------------|
+                         |                                          | visit(ElementA) |
+                         |                                          | visit(ElementB) |
+                         |                                          -------------------
+                         |                                            /\           /\
+                         |                                            |             |
+                         |                 ------------------------------          ------------------------------
+                         |                 |           Visitor1         |          |     Visitor2               |
+                         |                 |----------------------------|          |----------------------------|
+                         |                 | visit(ElementA){ElA.opA()} |          | visit(ElementA){ElA.opA()} |
+                         |                 | visit(ElementB){ElB.opB()} |          | visit(ElementB){ElB.opB()} |
+                         |                 ------------------------------          ------------------------------
+                         |
+                        \/                                  -------------------
+                   --------------------      (HAS A)        |  <interface>    |
+                   | Object structure |-------------------->|    Element      |
+                   --------------------                     |-----------------| 
+                                                            | accept(Visitor) |
+                                                            -------------------
+                                                              /\           /\
+                                                              |             |
+                                         ------------------------          ------------------------  
+                                         |   ElementA           |          |    ElementB          |
+                                         |----------------------|          |----------------------|
+                                         | accept(Visitor){...} |          | accept(Visitor){...} |
+                                         | operationA(){...}    |          | operationB(){...}    |
+                                         ------------------------          ------------------------
